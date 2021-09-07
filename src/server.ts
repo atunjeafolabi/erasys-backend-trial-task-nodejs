@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import app from './api/bootstrap/app';
+import app from './bootstrap/app';
 // import express from 'express';
 // import router from './api/routes';
 

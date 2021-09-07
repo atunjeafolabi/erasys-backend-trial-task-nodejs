@@ -1,7 +1,7 @@
 {
-  "name": "erasys-password-checker-api-and-cli",
+  "name": "erasys-password-checker-api",
   "version": "0.1.0",
-  "description": "An API endpoint that checks if a password is valid and a CLI application that check for compromised passwords",
+  "description": "An API endpoint that checks if a password is valid",
   "main": "src/server.ts",
   "directories": {
     "test": "test"
@@ -14,7 +14,6 @@
   },
   "keywords": [
     "API",
-    "CLI",
     "Password",
     "Checker"
   ],

@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import Container from 'typedi';
-import PasswordValidator from '../src/api/validators/PasswordValidator';
-import Password from '../src/api/password/Password';
+import PasswordValidator from '../src/validators/PasswordValidator';
+import Password from '../src/password/Password';
 
 describe('password tests', () => {
   it('a password less than five characters is NOT acceptable', () => {

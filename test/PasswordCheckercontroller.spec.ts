@@ -1,5 +1,5 @@
 import supertest from 'supertest';
-import app from '../src/api/bootstrap/app';
+import app from '../src/bootstrap/app';
 import { StatusCodes } from 'http-status-codes';
 
 const request = supertest.agent(app);
