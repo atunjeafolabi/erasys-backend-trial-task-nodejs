@@ -1,17 +1,18 @@
 import 'reflect-metadata';
-import express from 'express';
-import router from './api/routes';
+import app from './api/bootstrap/app';
+// import express from 'express';
+// import router from './api/routes';
 
 require('dotenv').config();
 
-const app = express();
+// const app = express();
 
 // Parse incoming JSON data
-app.use(express.json());
+// app.use(express.json());
 
 const port = process.env.APP_PORT || 3000;
 
-app.use('/', router);
+// app.use('/', router);
 
 app.listen(port, () => {
   console.log(`server is listening on ${port}`);
