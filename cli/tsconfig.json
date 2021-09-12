@@ -2,19 +2,20 @@
     "compilerOptions": {
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "target": "es6",
-        "module": "commonjs",
+        "target":"es6",
+        "module":"CommonJS",
         "outDir": "./dist",
-        "rootDir": "./src",
+        // "rootDir": "./src",
         "strict": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
-        "lib": ["es6", "es2015", "dom"],
-        // "declaration": true,
-        "types": ["node"],
-        "resolveJsonModule": true
+        "lib": ["es2020"],
+        "types": ["jest", "node"],
+        "resolveJsonModule": true,
+        "strictPropertyInitialization": false,
     },
     "exclude": [
-        "./node_modules"
+        "./node_modules",
+        // "test"
     ],
 }

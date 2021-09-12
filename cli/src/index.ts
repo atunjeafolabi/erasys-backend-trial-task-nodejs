@@ -1,10 +1,37 @@
 #! /usr/bin/env node
-const clear = require('clear');
+import 'reflect-metadata';
+import PasswordChecker from './checker';
+import figlet from 'figlet';
+import dotenv from 'dotenv';
+import { Password } from './entity/password';
+import { createConnection } from 'typeorm';
 
-clear();
+dotenv.config();
 
-console.log('Hello World!');
+console.log(
+  figlet.textSync('Password Checker', {
+    horizontalLayout: 'default',
+  })
+);
 
-// console.log(
-//   chalk.red(figlet.textSync('pizza-cli', { horizontalLayout: 'full' }))
-// );
+console.log(`
+---------------------------------------------------------------
+✓ Checks if a password is valid according to pre-defined rules.
+✓ Checks if a password has been compromised.
+---------------------------------------------------------------
+`);
+
+async function passwordCheck() {
+  await createConnection();
+
+  const passwordChecker = new PasswordChecker();
+  const passwords = await Password.find();
+
+  passwords.forEach((password: Password) => {
+    passwordChecker.check(password);
+  });
+}
+
+passwordCheck();
+
+// console.log(process.argv);

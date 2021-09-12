@@ -9,8 +9,10 @@
         "strict": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
+        "types": ["node"]
     },
     "exclude": [
-        "./node_modules"
+        "./node_modules",
+        "./test"
     ],
 }
