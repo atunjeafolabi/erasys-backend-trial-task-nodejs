@@ -31,6 +31,7 @@ describe('password checker test', () => {
     // mock console.log
     console.log = jest.fn();
 
+    // initiate an action
     const passwordChecker = new PasswordChecker();
     const password = new Password().setPassword(validPassword);
     await passwordChecker.check(password);
