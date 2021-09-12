@@ -1,4 +1,4 @@
-# Password Checker App
+# Password Checker
 
 ## Overview
 
@@ -20,6 +20,27 @@ The password rules for the `api` are stored in a separate json file located in `
 - Express (for the api)
 - MySQL (using TypeORM)
 
+## Libraries
+
+A few libraries used in this project include:
+
+- express
+- axios
+- chalk
+- dotenv
+- figlet
+- http-status-codes
+- mysql
+- typedi
+- typeorm
+- jest
+- supertest
+
+#### Linters
+
+- xo
+- prettier
+
 ## Setup:
 
 - Clone the project: `git clone https://gitlab.com/atunje_afolabi/erasys-backend-trial-task-nodejs.git`
@@ -32,6 +53,11 @@ The password rules for the `api` are stored in a separate json file located in `
   - Load the `sqldump.sql` into the database
   - `cd` into the `cli` folder
   - Run `npm install`
+- Docker Container
+  - Pull the docker image
+    - `docker pull erasys/compromised-pw-api:1.0.1`
+  - Start the docker container
+    - `docker run -p 5000:5000 -t erasys/compromised-pw-api:1.0.1`
 
 ## Usage
 
@@ -39,9 +65,9 @@ To run the CLI script:
 
 - Run `npm run dev` from the `cli` folder
 
-### Screenshots
+## Screenshots
 
-##### The CLI
+#### The CLI
 
 ![The CLI](screenshots/cli.png)
 
@@ -62,10 +88,12 @@ To run the CLI script:
 - Improve user interface of the CLI
 - Add more tests
 - Add database migration for automaic table creation during testing
+- Make the CLI application globally installable
+- Add the possibility of passing in command line options into the CLI script
 - Further refactoring of the codebase
 
 ## Issues
 
 - For any issue, kindly create a new [issue](https://gitlab.com/atunje_afolabi/erasys-backend-trial-task-nodejs/-/issues).
 
-Thank You!
+Danke!
