@@ -1,4 +1,3 @@
-import { createConnection } from 'typeorm';
 import { Password } from '../entity/password';
 import axios from 'axios';
 import chalk from 'chalk';
