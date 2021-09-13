@@ -8,6 +8,7 @@
     },
     "scripts": {
         "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+        "pwchecker": "ts-node src/index.ts",
         "build": "tsc -p .",
         "test": "jest -c ./jest.config.json",
         "local": "npm i -g && password-checker"
@@ -33,7 +34,8 @@
         "mysql": "^2.18.1",
         "reflect-metadata": "^0.1.13",
         "typedi": "^0.10.0",
-        "typeorm": "^0.2.37"
+        "typeorm": "^0.2.37",
+        "yargs": "^16.2.0"
     },
     "devDependencies": {
         "@types/figlet": "^1.5.4",

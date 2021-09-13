@@ -2,9 +2,9 @@
 
 ## Overview
 
-This is a solution to Erasys trial task for back-end developers
+This is a solution to Erasys trial task for back-end developers.
 
-This project is structured into two parts:
+The solution is structured into two parts:
 
 - `api`
   - an endpoint to check the validity of a password according to preset rules
@@ -29,6 +29,7 @@ A few libraries used in this project include:
 - chalk
 - dotenv
 - figlet
+- yargs
 - http-status-codes
 - mysql
 - typedi
@@ -41,7 +42,7 @@ A few libraries used in this project include:
 - xo
 - prettier
 
-## Setup:
+## Setup
 
 - Clone the project: `git clone https://gitlab.com/atunje_afolabi/erasys-backend-trial-task-nodejs.git`
 - `api`
@@ -63,7 +64,8 @@ A few libraries used in this project include:
 
 To run the CLI script:
 
-- Run `npm run dev` from the `cli` folder
+- Run `npm run pwchecker` from the `cli` folder. This only checks if a passord is valid and compromised but does not update the valid field of the database.
+- To update the database, run `npm run pwchecker -- --updateValid`
 
 ## Screenshots
 
@@ -71,7 +73,7 @@ To run the CLI script:
 
 ![The CLI](screenshots/cli.png)
 
-## Running Test:
+## Running Test
 
 - `api`
   - Run `npm run test`
@@ -89,7 +91,6 @@ To run the CLI script:
 - Add more tests
 - Add database migration for automaic table creation during testing
 - Make the CLI application globally installable
-- Add the possibility of passing in command line options into the CLI script
 - Further refactoring of the codebase
 
 ## Issues

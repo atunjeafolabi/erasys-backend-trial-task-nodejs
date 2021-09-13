@@ -5,8 +5,11 @@ import figlet from 'figlet';
 import dotenv from 'dotenv';
 import { Password } from './entity/password';
 import { createConnection } from 'typeorm';
+import yargs from 'yargs';
 
 dotenv.config();
+
+const args: any = yargs(process.argv.slice(2)).argv;
 
 console.log(
   figlet.textSync('Password Checker', {
@@ -21,17 +24,20 @@ console.log(`
 ---------------------------------------------------------------
 `);
 
-async function passwordCheck() {
+// If this option is passed, the valid field will be updated in the database
+const shouldUpdateValidField: boolean = args.updateValid;
+
+async function passwordCheck(shouldUpdateValidField: boolean) {
   await createConnection();
 
   const passwordChecker = new PasswordChecker();
   const passwords = await Password.find();
 
   passwords.forEach((password: Password) => {
-    passwordChecker.check(password);
+    passwordChecker.check(password, shouldUpdateValidField);
   });
 }
 
-passwordCheck();
+passwordCheck(shouldUpdateValidField);
 
-// console.log(process.argv);
+// process.exit(0);

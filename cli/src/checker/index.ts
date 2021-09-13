@@ -8,7 +8,7 @@ class PasswordChecker {
   private IS_VALID = 1;
   private NOT_VALID = 0;
 
-  async check(password: Password) {
+  async check(password: Password, shouldUpdateValidField: boolean) {
     const passwordCheckerApi = process.env.PASSWORD_CHECKER_API;
     const isCompromised = await this.isCompromised(password.password);
     let compromised: string = '';
@@ -22,8 +22,10 @@ class PasswordChecker {
       });
 
       if (response.status === StatusCodes.NO_CONTENT) {
-        password.valid = this.IS_VALID;
-        password.save();
+        if (shouldUpdateValidField) {
+          password.valid = this.IS_VALID;
+          password.save();
+        }
         console.log(
           `${chalk.green('VALID')} ${compromised}: ${
             password.password
@@ -32,8 +34,10 @@ class PasswordChecker {
       }
     } catch (error: any) {
       if (error.response.status === StatusCodes.BAD_REQUEST) {
-        password.valid = this.NOT_VALID;
-        password.save();
+        if (shouldUpdateValidField) {
+          password.valid = this.NOT_VALID;
+          password.save();
+        }
         const errorMessages = error.response.data.errors;
 
         Object.values(errorMessages).forEach((errorMessage) => {
