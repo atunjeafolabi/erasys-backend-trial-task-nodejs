@@ -8,7 +8,7 @@ class PasswordChecker {
   private IS_VALID = 1;
   private NOT_VALID = 0;
 
-  async check(password: Password, shouldUpdateValidField: boolean) {
+  async check(password: Password, shouldUpdateValidField: boolean = false) {
     const passwordCheckerApi = process.env.PASSWORD_CHECKER_API;
     const isCompromised = await this.isCompromised(password.password);
     let compromised: string = '';

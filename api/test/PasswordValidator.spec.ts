@@ -1,4 +1,3 @@
-import '@types/jest';
 import 'reflect-metadata';
 import Container from 'typedi';
 import PasswordValidator from '../src/validators/PasswordValidator';

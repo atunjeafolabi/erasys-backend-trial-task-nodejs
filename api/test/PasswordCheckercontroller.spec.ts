@@ -1,4 +1,3 @@
-import '@types/jest';
 import supertest from 'supertest';
 import app from '../src/bootstrap/app';
 import { StatusCodes } from 'http-status-codes';
