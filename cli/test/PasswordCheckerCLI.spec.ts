@@ -5,6 +5,7 @@ import { Password } from '../src/entity/password';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
+import App from '../src/bootstrap/app';
 
 process.env = Object.assign(process.env, {
   PASSWORD_CHECKER_API: 'http://localhost:3000/passwords',
@@ -13,151 +14,84 @@ process.env = Object.assign(process.env, {
 });
 
 describe('password checker test', () => {
-  beforeAll(async () => {
-    await createConnection();
-  });
+  const IS_VALID = 1;
+  const NOT_VALID = 0;
 
-  it('a valid password prints a valid message', async () => {
-    const validPassword = 'password1@';
-    // mock api calls
-    mockApiEndpoints(
-      validPassword,
-      '',
-      StatusCodes.NO_CONTENT,
-      StatusCodes.NO_CONTENT
-    );
-    const compromised = '';
+  it('a 204 response sets a password as valid', async () => {
+    /**
+     * mock api calls for valid and uncompromised
+     * password by forcing 204 response code in
+     * both cases
+     */
+    mockApiEndpoints([], StatusCodes.NO_CONTENT, StatusCodes.NO_CONTENT);
 
-    // mock console.log
-    console.log = jest.fn();
+    const password = new Password();
+    password.setValue('dummy-password');
 
     // initiate an action
     const passwordChecker = new PasswordChecker();
-    const password = new Password().setPassword(validPassword);
     await passwordChecker.check(password);
 
     // expectation
-    expect(console.log).toHaveBeenCalledWith(
-      `${chalk.green('VALID')} ${compromised}: ${password.password} is valid`
-    );
+    expect(password.isValid()).toEqual(IS_VALID);
   });
 
-  it('a password below five characters is prints an invalid message', async () => {
-    const invalidPassword = 'pas1@';
-    const compromised = '';
-    const errorMessage = 'Password length must be minimum 5 characters';
-
+  it('an invalid password sets password errors', async () => {
+    const errorMessage = ['Password length must be minimum 5 characters'];
     mockApiEndpoints(
-      invalidPassword,
       errorMessage,
       StatusCodes.BAD_REQUEST,
       StatusCodes.NO_CONTENT
     );
 
-    console.log = jest.fn();
-
+    const password = new Password();
+    password.setValue('dummy-password');
     const passwordChecker = new PasswordChecker();
-    const password = new Password().setPassword(invalidPassword);
     await passwordChecker.check(password);
 
-    expect(console.log).toHaveBeenCalledWith(
-      `${chalk.red('INVALID')} ${compromised}: ${
-        password.password
-      } (${errorMessage})`
-    );
+    expect(password.isValid()).toBe(NOT_VALID);
+    expect(password.getErrorMessages()).toEqual(errorMessage);
   });
 
-  it('a password without at least one digit prints an invalid message', async () => {
-    const invalidPassword = 'password@';
-    const compromised = '';
-    const errorMessage = 'At least one digit must be used in the password';
+  it('a 200 response from the compromised API sets the compromised field of password to true', async () => {
+    /**
+     * mock api calls for valid and compromised
+     * password by forcing 204 and 200 response code
+     */
+    mockApiEndpoints([], StatusCodes.NO_CONTENT, StatusCodes.OK);
 
-    mockApiEndpoints(
-      invalidPassword,
-      errorMessage,
-      StatusCodes.BAD_REQUEST,
-      StatusCodes.NO_CONTENT
-    );
-
-    console.log = jest.fn();
-
+    const password = new Password();
+    password.setValue('dummy-password');
     const passwordChecker = new PasswordChecker();
-    const password = new Password().setPassword(invalidPassword);
     await passwordChecker.check(password);
 
-    expect(console.log).toHaveBeenCalledWith(
-      `${chalk.red('INVALID')} ${compromised}: ${
-        password.password
-      } (${errorMessage})`
-    );
-  });
-
-  it('a password without at least one special or alretnatively upper-case character prints an invalid message', async () => {
-    const invalidPassword = 'password1';
-    const compromised = '';
-    const errorMessage =
-      'Password must contain at least one upper-case character OR alternatively one special character';
-
-    mockApiEndpoints(
-      invalidPassword,
-      errorMessage,
-      StatusCodes.BAD_REQUEST,
-      StatusCodes.NO_CONTENT
-    );
-
-    console.log = jest.fn();
-
-    const passwordChecker = new PasswordChecker();
-    const password = new Password().setPassword(invalidPassword);
-    await passwordChecker.check(password);
-
-    expect(console.log).toHaveBeenCalledWith(
-      `${chalk.red('INVALID')} ${compromised}: ${
-        password.password
-      } (${errorMessage})`
-    );
-  });
-
-  it('a valid and compromised password prints a corresponding message', async () => {
-    const validPassword = 'password1@';
-
-    mockApiEndpoints(validPassword, '', StatusCodes.NO_CONTENT, StatusCodes.OK);
-    const compromised = chalk.yellow('(COMPROMISED)');
-
-    console.log = jest.fn();
-
-    const passwordChecker = new PasswordChecker();
-    const password = new Password().setPassword(validPassword);
-    await passwordChecker.check(password);
-
-    expect(console.log).toHaveBeenCalledWith(
-      `${chalk.green('VALID')} ${compromised}: ${password.password} is valid`
-    );
+    expect(password.isCompromised()).toBe(true);
   });
 });
 
 function mockApiEndpoints(
-  password: string,
-  message: string = '',
-  postResponseCode: number,
-  getResponseCode: number
+  message: string[] = [],
+  passwordCheckerResponseCode: number,
+  compromisedPasswordCheckerResponseCode: number
 ) {
+  const dummyPassword = 'dummy-password';
   let passwordCheckerResponseMessage = {};
-  if (message !== '') {
+
+  if (message !== []) {
     passwordCheckerResponseMessage = {
-      errors: [message],
+      errors: message,
     };
   }
 
   const mock = new MockAdapter(axios);
 
   mock
-    .onPost(`${process.env.PASSWORD_CHECKER_API}`, { password })
-    .reply(postResponseCode, passwordCheckerResponseMessage);
+    .onPost(`${process.env.PASSWORD_CHECKER_API}`, { password: dummyPassword })
+    .reply(passwordCheckerResponseCode, passwordCheckerResponseMessage);
 
   mock
     .onGet(`${process.env.COMPROMISED_PASSWORD_CHECKER_API}`, {
-      params: { password },
+      params: { password: dummyPassword },
     })
-    .reply(getResponseCode);
+    .reply(compromisedPasswordCheckerResponseCode);
 }

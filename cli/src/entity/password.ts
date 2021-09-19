@@ -8,8 +8,38 @@ export class Password extends BaseEntity {
   @Column()
   valid: number;
 
-  setPassword(value: string) {
+  compromised: boolean;
+  errorMessages: [];
+
+  setValue(value: string) {
     this.password = value;
-    return this;
+  }
+
+  getValue() {
+    return this.password;
+  }
+
+  setCompromised(value: boolean) {
+    this.compromised = value;
+  }
+
+  isCompromised() {
+    return this.compromised;
+  }
+
+  setValid(value: number) {
+    this.valid = value;
+  }
+
+  isValid() {
+    return this.valid;
+  }
+
+  setErrorMessages(messages: []) {
+    this.errorMessages = messages;
+  }
+
+  getErrorMessages() {
+    return this.errorMessages;
   }
 }
